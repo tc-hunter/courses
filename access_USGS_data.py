@@ -95,10 +95,16 @@ for m in match:
     times = times[window].copy()
     ## Figure out reasonable y-axis tick values from input data
     maxvalue = window_df[field].values.max().item()  # maximum value of data
-    for interval in np.arange(500.,5001.,500.):
-        if maxvalue/interval <= 9.:
-            # for readability, plot no more than ten (10) tick labels
-            break
+    if field == '00060':  # discharge
+        for interval in np.arange(500.,5001.,500.):
+            if maxvalue/interval <= 9.:
+                # for readability, plot no more than ten (10) tick labels
+                break
+    elif field == '00065':  # gage height
+        for interval in np.arange(1.,51.,1.):
+            if maxvalue/interval <= 9.:
+                # for readability, plot no more than ten (10) tick labels
+                break
     yticks = np.arange(0.,np.ceil(maxvalue/interval)*interval+1.,interval)
     ## Quick plot to visualize discharge
     hours = int(24*(times[-1]-times[0]).days + (times[-1]-times[0]).seconds/(60*60))
