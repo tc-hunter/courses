@@ -20,18 +20,28 @@ https://help.waterdata.usgs.gov/parameter_cd?group_cd=PHY
 Written by Kim Wood, 2025.09.16
 Last modified 2025.12.06
 """
-from custom_func import np64_to_dt
 from datetime import datetime, timedelta
 import dataretrieval.nwis as nwis
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+
+#---------------------------------------------------------------------------------------------------
+def np64_to_dt(dtval):
+    """
+    Custom function to convert a numpy.datetime64 object to a datetime object
+    """
+    timestamp = ((dtval - np.datetime64('1970-01-01T00:00:00')) / np.timedelta64(1, 's'))
+    return datetime.utcfromtimestamp(timestamp)
+#---------------------------------------------------------------------------------------------------
+
+
 #### Provide the streamgage ID as a string
 site = '09486500'  # https://waterdata.usgs.gov/state/Arizona/
 field = '00060'    # 00060 = discharge | 00065 = gage height
 field_name = {'00060': 'discharge', '00065': 'gage height'}
-field_label = {'00060': 'discharge [$\mathregular{ft^3\ s^{-1}}$]',
+field_label = {'00060': 'discharge [$\mathregular{ft^{3}\ s^{-1}}$]',
                '00065': 'gage height [ft]'}
 
 #### Pull that location's info as its own dataframe (and format site name for later use)
